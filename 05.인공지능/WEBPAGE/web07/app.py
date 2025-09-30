@@ -19,8 +19,9 @@ def predict():
     y_pred = model.predict(X_pred)
 
     df_test = pd.read_csv('data/타이타닉/test.csv')
-    df_test['pred'] = y_pred
-    df_test.head(5)
+    df_test['Pred'] = y_pred
+    df_test.to_csv('data/타이타닉/test.csv', index=False)
+    return 'Success'
 
 @app.route('/data')
 def data():
@@ -29,9 +30,10 @@ def data():
     start = (page-1)*size #0, 5, 10
     end = (page*size) #4, 9, 14
     df = pd.read_csv('data/타이타닉/test.csv')
-    cols=['Name', 'Sex', 'Age', 'Fare', 'Pclass', 'Embarked']
-    df = df[cols]
-    df.columns = ['성명','성별','나이','요금','등급','항구']
+    # df['Pred'] = ''
+    # cols=['Name', 'Sex', 'Age', 'Fare', 'Pclass', 'Embarked','Pred']
+    # df = df[cols]
+    # df.columns = ['성명','성별','나이','요금','등급','항구','예측결과']
     total = len(df)
     df = df[start:end]
     table = df.to_html(classes='table table-dark table-striped-columns', index=False)
