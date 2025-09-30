@@ -1,0 +1,45 @@
+<div class="my-5">
+    <h1 class="text-center mb-5">{{title}}</h1>
+    <div id="test"></div>
+    <div class="text-center">
+        <button id="prev" class="btn btn-sm btn-secondary px-3">이전</button>
+        <span id="page">1/10</span>
+        <button id="next" class="btn btn-sm btn-secondary px-3">다음</button>
+    </div>
+</div>
+
+<script>
+    let page = 1;
+    let size = 5;
+    getData();
+
+    $("#prev").on("click", function () {
+        page = page -= 1;
+        getData();
+    });
+
+
+    $("#next").on("click", function () {
+        page = page += 1;
+        getData();
+    });
+
+    function getData() {
+        $.ajax({
+            type: 'get',
+            url: '/data',
+            data: { page, size },
+            success: function (data) {
+                console.log(data);
+                $("#test").html(data.table);
+                last = Math.ceil(data.total/size);
+                $("#page").html(`${page}/${last}`)
+                if(page==1) $("#prev").attr("disabled", true);
+                else $("#prev").attr("disabled", false);
+                if(page==last) $("#next").attr("disabled", true);
+                else $("#next").attr("disabled", false);
+            }
+        })
+    };
+
+</script>

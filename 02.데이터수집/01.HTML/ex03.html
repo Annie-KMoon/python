@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>연습03</title>
+    <style>
+        
+    * {
+        font-family: "Noto Serif KR", serif;
+        font-optical-sizing: auto;
+        font-weight: <weight>;
+        font-style: normal;
+        }
+
+        table {
+            width: 500px;
+            margin: 50px 0px auto;
+            border-collapse: collapse;
+        }
+
+        table tr:first-child{
+            text-align: center;
+        }
+
+        table tr:nth-child(2n){
+            background-color:burlywood;
+            color: darkolivegreen;
+        }
+
+        td {
+            border: 2px solid darkolivegreen;
+            padding: 5px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <td>학번</td>
+            <td width="100px">이름</td>
+            <td width="300px">주소</td>
+        </tr>
+        <tr>
+            <td>01</td>
+            <td width="100px">홍길동</td>
+            <td width="300px">경기도 광명시 철산동</td>
+        </tr>
+        <tr>
+            <td>02</td>
+            <td width="100px">심청이</td>
+            <td width="300px">서울시 강서구 마곡동</td>
+        </tr>
+        <tr>
+            <td>03</td>
+            <td width="100px">강감찬</td>
+            <td width="300px">인천 서구 경서동</td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+            <td colspan="2">지역별 홍차</td>
+        </tr>
+        <tr>
+            <td rowspan="3">중국</td>
+            <td>정산소종</td>
+        </tr>
+        <tr>
+            <td>기문</td>
+        </tr>
+        <tr>
+             <td>운남</td>
+        </tr>
+        <tr>
+            <td rowspan="4">인도 및 스리랑카</td>
+            <td>아삼</td>
+        </tr>
+        <tr>
+            <td>실론</td>
+        </tr>
+        <tr>
+            <td>닐기리</td>
+        </tr>
+        <tr>
+            <td>다즐링</td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+            <td colspan="2">1</td>
+            <td>2</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td rowspan="2">5</td>
+            <td rowspan="2" colspan="2">6</td>
+        </tr>        
+        <tr>
+            <td>7</td>
+        </tr>
+        <tr>
+            <td rowspan="2">8</td>
+            <td>9</td>
+            <td colspan="2">10</td>
+        </tr>
+        <tr>
+            <td colspan="3">10</td>
+        </tr>                
+    </table>
+</body>
+</html>

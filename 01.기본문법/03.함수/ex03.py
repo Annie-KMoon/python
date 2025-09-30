@@ -1,0 +1,31 @@
+#숫자 체크 함수 / 숫자면 T, else F
+def isNumber(str):
+    if str.isnumeric():
+        return True
+    else:
+        print("숫자를 입력하세요!")
+        return False
+    
+#학점구하기 함수
+def grade (score):
+    grade = ""
+    if score >=90:
+        grade="A"
+    elif score >=80:
+        grade="B"
+    elif score >=70:
+        grade="C"
+    elif score >=60:
+        grade="D"
+    else:
+        grade="F"
+    return grade
+
+while True:
+    score = input("점수>")
+    if score == "":
+        break
+    if isNumber(score): #위에서 제작한 함수활용
+        level = grade(int(score))
+        print(f"평점:{level}")
+

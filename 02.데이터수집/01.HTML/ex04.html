@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Noto+Serif+KR:wght@200..900&display=swap"
+        rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>연습04</title>
+    <style>
+        * {
+            font-family: "Noto Sans KR", sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        body {
+            margin: 0px auto;
+            width: 500px;
+        }
+
+        span {
+            display: inline-block;
+            width: 100px;
+            background-color: rgb(50, 51, 52);
+            color:aliceblue;
+            padding: 5px;
+            margin: 5px;
+            text-align: center;
+        }
+
+    input[type='text'], input[type='password'], select
+     {
+        border: 1px solid red;
+        padding: 5px;
+        border-radius: 5px;
+        outline: none;
+    }
+
+    input[type='text']:focus{
+        background-color: rgb(191, 189, 189);
+    }
+
+    form {
+        border: 5px double black;
+        padding: 20px;
+    }
+
+    .buttons {
+        text-align: center;
+        margin-top: 30px;
+    }
+    input[type='submit'],[type='reset']{
+        cursor: pointer;
+        background-color: red;
+        color: black;
+        border: none;
+        padding: 5px 20px;
+        border-radius: 5px;
+    }
+    </style>
+</head>
+
+<body>
+    <h1>회원가입</h1>
+    <form>
+        <div>
+            <span>ID(아이디):</span><input type="text">
+        </div>
+        <div>
+            <span>PW(비밀번호):</span><input type="password">
+        </div>
+        <div>
+            <span>직업:</span>
+
+            <select>
+                <option>프로덕트매니저</option>
+                <option selected>프로그래머</option>
+                <option>UX 디자이너</option>
+                <option>마케터</option>
+                <option>브랜드매니저</option>
+            </select>
+        </div>
+        <div>
+            <span>성별:</span>
+            <input type="radio" name="gender" checked>남성
+            <input type="radio" name="gender" >여성
+        </div>
+        <div>
+            <span>취미:</span>
+            <input type="checkbox" checked>독서
+            <input type="checkbox">요가
+            <input type="checkbox">영화감상
+            <input type="checkbox">컴퓨터게임
+        </div>
+        <div class="buttons">
+            <input type="submit" value="회원가입">
+            <input type="reset" value="가입취소">
+        </div>
+    </form>
+</body>
+
+</html>
