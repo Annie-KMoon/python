@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
+#box span {
+    color: red;
+}
+
+* {
+    font-family: "Noto Sans KR", sans-serif;
+}
+
+#box .modal-body {
+    font-size: 20px;
+    color: gray;
+}
+
+table.dataframe th,
+td {
+    text-align: center;
+    /* 가운데 정렬 */
+    vertical-align: middle;
+    /* 세로도 가운데 맞춤 */
+}
+
+.title {
+    font-size: 12px;
+
+}
+
+#result img{
+    cursor: pointer;
+}
