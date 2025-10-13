@@ -1,4 +1,96 @@
-<div class="container my-5">
+<!-- <div class="container my-5">
     <h1 class="text-center">{{title}}</h1>
     {{info|safe}}
+</div> -->
+
+<div class="container my-5">
+  <h1 class="text-center mb-4">{{ title }}</h1>
+
+  <table class="table table-striped table-hover text-center" id="animalTable">
+    <thead>
+      <tr>
+        <th>동물 고유번호</th>
+        <th>이름</th>
+        <th>종</th>
+        <th>성별</th>
+        <th>출생년도</th>
+        <th>체중</th>
+        <th>입양상태</th>
+        <th>임시보호상태</th>
+        <th>입소날짜</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in animals %}
+      <tr data-url="{{ a['사진url'] }}">
+        <td>{{ a['동물 고유번호'] }}</td>
+        <td>{{ a['이름'] }}</td>
+        <td>{{ a['종'] }}</td>
+        <td>{{ a['성별'] }}</td>
+        <td>{{ a['출생년도'] }}</td>
+        <td>{{ a['체중'] }}</td>
+        <td>{{ a['입양상태'] }}</td>
+        <td>{{ a['임시보호상태'] }}</td>
+        <td>{{ a['입소날짜'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- ✅ 페이지네이션 버튼 -->
+  <div class="text-center my-4">
+    {% if page > 1 %}
+    <a href="?page={{ page - 1 }}" class="btn btn-secondary btn-sm">이전</a>
+    {% else %}
+    <button class="btn btn-secondary btn-sm" disabled>이전</button>
+    {% endif %}
+
+    <span class="mx-2"> {{ page }} / {{ total_pages }}</span>
+
+    {% if page < total_pages %}
+    <a href="?page={{ page + 1 }}" class="btn btn-secondary btn-sm">다음</a>
+    {% else %}
+    <button class="btn btn-secondary btn-sm" disabled>다음</button>
+    {% endif %}
+  </div>
 </div>
+
+<!-- 🐶 이미지 모달 -->
+<div class="modal fade" id="photoModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <img id="animalImg" src="" alt="동물 사진" class="img-fluid rounded">
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* 커서 포인터 + 강조 효과 */
+  #animalTable tbody tr {
+    cursor: pointer;
+  }
+  #animalTable tbody tr:hover {
+    background-color: #f0f8ff;
+  }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  $(function () {
+    // 행 클릭 시 모달 표시
+    $("#animalTable tbody").on("click", "tr", function () {
+      const imgUrl = $(this).data("url");
+      if (imgUrl) {
+        $("#animalImg").attr("src", imgUrl);
+        const modal = new bootstrap.Modal(document.getElementById("photoModal"));
+        modal.show();
+      } else {
+        alert("사진이 없습니다 😢");
+      }
+    });
+  });
+</script>

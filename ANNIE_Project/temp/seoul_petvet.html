@@ -1,4 +1,76 @@
+
+
 <div class="container my-5">
     <h1 class="text-center">{{title}}</h1>
     {{info|safe}}
 </div>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>서울시 동물병원 지도 (카카오맵)</title>
+  <style>
+    #map { width: 100%; height: 500px; margin-top: 10px; }
+  </style>
+  <script type="text/javascript" 
+          src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=72b8186e3025db91d9a570623050d352">
+  </script>
+</head>
+<body>
+  <h2>서울시 동물병원 위치 검색</h2>
+  <input type="text" id="name" placeholder="동물병원 이름 입력" style="width:250px;">
+  <button onclick="search()">검색</button>
+  
+  <div id="map"></div>
+
+  <script>
+    // 초기 지도 (서울 중심)
+    const mapContainer = document.getElementById('map');
+    const mapOption = {
+      center: new kakao.maps.LatLng(37.5665, 126.9780),
+      level: 7
+    };
+    const map = new kakao.maps.Map(mapContainer, mapOption);
+    let markers = [];
+
+    function search() {
+      const name = document.getElementById('name').value;
+      fetch(`/search?name=${encodeURIComponent(name)}`)
+        .then(res => res.json())
+        .then(data => {
+          // 기존 마커 제거
+          markers.forEach(m => m.setMap(null));
+          markers = [];
+
+          if (data.length === 0) {
+            alert("검색 결과가 없습니다.");
+            return;
+          }
+
+          const bounds = new kakao.maps.LatLngBounds();
+
+          data.forEach(h => {
+            const position = new kakao.maps.LatLng(h.위도, h.경도);
+            const marker = new kakao.maps.Marker({ position });
+            marker.setMap(map);
+            markers.push(marker);
+            bounds.extend(position);
+
+            const infowindow = new kakao.maps.InfoWindow({
+              content: `<div style="padding:5px;font-size:13px;">
+                         <b>${h.사업장명}</b><br>${h.도로명주소}
+                        </div>`
+            });
+            kakao.maps.event.addListener(marker, 'click', function() {
+              infowindow.open(map, marker);
+            });
+          });
+
+          // 지도 범위 자동 조정
+          map.setBounds(bounds);
+        });
+    }
+  </script>
+</body>
+</html>

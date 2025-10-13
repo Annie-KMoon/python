@@ -1,5 +1,5 @@
 <div class="my-5">
-    <h1 class="text-center mb-5">반려동물 뉴스 검색</h1>
+    <h1 class="text-center mb-5">{{title}}</h1>
     <div class="row">
         <div class="col-12 col-md-6 col-lg-4">
             <form name="frm">
@@ -58,7 +58,7 @@
     $("#news").on("click", ".btn-danger", function () {
         $.ajax({
             type: 'get',
-            url: '/predict',
+            url: 'news/predict',
             data: { 'text': $(this).attr("text") },
             success: function (data) {
                 showBox(`이 기사는 <span class="red">${data}</span>적 기사입니다.`);
@@ -84,7 +84,7 @@
         const query = $(frm.query).val();
         $.ajax({
             type: 'get',
-            url: '/search',
+            url: 'news/search',
             data: { query, page },
             success: function (data) {
                 const total = data.total

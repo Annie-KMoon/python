@@ -1,6 +1,19 @@
 <div class="my-5">
-    <h1 class="text-center">{{title}}</h1>
-    <div>
-        <h5 class="text-center">작업중</h5>
+    <div class='container'>
+        <h1 id='title' class='text-center my-5'>서울시 유기동물 연도별 보호 현황(2013~2023)</h1>
+        <div class='text-center'>
+            <div class="text-center mt-5">
+                <img id="graph" src="http://placehold.co/500X300" width="100%">
+            </div>
+            <button id="btn1" class="btn btn-secondary">그래프 출력</button>
+
+        </div>
     </div>
 </div>
+
+<script>
+    $("#btn1").on("click", function () {
+        const title = $(this).html();
+        $("#graph").attr("src", "/seoul_dogshelter/graph1")
+    })
+</script>

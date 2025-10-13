@@ -1,6 +1,6 @@
-# 네이버 검색 API: 뉴스검색
-import requests
+# 네이버 검색 API 예제 - 블로그 검색
 import urllib.request
+import urllib.parse
 import json
 
 #함수생성
@@ -9,8 +9,8 @@ def getNews(query, start, display):
     client_secret = "CxLnF9_VmQ"
     encText = urllib.parse.quote(query)
     url = f"https://openapi.naver.com/v1/search/news.json?query={encText}&start={start}&display={display}" 
-    # #+ encText # JSON 결과
-    # url = "https://openapi.naver.com/v1/search/blog.xml?query={encText}&start={start}&display={display}" # XML 결과
+    #+ encText # JSON 결과
+    # url = "https://openapi.naver.com/v1/search/blog.xml?query=" + encText # XML 결과
     request = urllib.request.Request(url)
     request.add_header("X-Naver-Client-Id",client_id)
     request.add_header("X-Naver-Client-Secret",client_secret)
@@ -23,5 +23,5 @@ def getNews(query, start, display):
         # print(response_body.decode('utf-8'))
         return result['items'], result['total']
     else:
-        print("Error Code:" + rescode)
+        print("Error Code:", rescode)
         return None

@@ -5,6 +5,7 @@ import FinanceDataReader as fdr
 import matplotlib.pyplot as plt
 plt.rc('font', family='Malgun Gothic')
 plt.rc('axes',unicode_minus=False)
+
 from naverapi import getNews
 from model import createModel
 
@@ -13,6 +14,7 @@ import routes.seoul_dogshelterinfo as sdsi
 import routes.seoul_dogshelter as sds
 import routes.seoul_petvet as spv
 import routes.seoul_pet as sp
+import routes.weather as weather
 
 
 
@@ -23,6 +25,7 @@ app.register_blueprint(sdsi.bp)
 app.register_blueprint(sds.bp) 
 app.register_blueprint(sp.bp) 
 app.register_blueprint(spv.bp) 
+app.register_blueprint(weather.bp) 
 
 @app.route('/')
 def index():

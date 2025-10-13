@@ -16,7 +16,7 @@ plt.switch_backend('agg')
 bp = Blueprint('news', __name__, url_prefix='/news')
 
 vector, model = createModel()
-@bp.route('/predict')
+@bp.route('news/predict')
 def predict():
     text = request.args['text']
     find_text = re.findall(r'[가-힣]', text)
@@ -29,7 +29,7 @@ def predict():
         return '긍정'
 
 
-@bp.route('/search')
+@bp.route('news/search')
 def search():
     page = int(request.args['page'])
     start= (page-1)*5+1 #display
@@ -41,7 +41,7 @@ def search():
 
 @bp.route('/')
 def news():
-    return render_template('index.html', pageName = 'news.html', title='AI PM PROJECT')
+    return render_template('index.html', pageName = 'news.html', title='반려견뉴스검색')
 
 # if __name__=='__main__':
 #     bp.run(port=5000, debug=True)
