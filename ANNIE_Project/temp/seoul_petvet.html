@@ -1,76 +1,133 @@
-
-
-<div class="container my-5">
-    <h1 class="text-center">{{title}}</h1>
-    {{info|safe}}
-</div>
-
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
-  <title>서울시 동물병원 지도 (카카오맵)</title>
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <!-- ✅ 카카오맵 JS SDK -->
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=72b8186e3025db91d9a570623050d352"></script>
+    <!-- ✅ 스크립트 -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
   <style>
-    #map { width: 100%; height: 500px; margin-top: 10px; }
+    #map {
+      width: 100%;
+      height: 400px;
+    }
   </style>
-  <script type="text/javascript" 
-          src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=72b8186e3025db91d9a570623050d352">
-  </script>
 </head>
-<body>
-  <h2>서울시 동물병원 위치 검색</h2>
-  <input type="text" id="name" placeholder="동물병원 이름 입력" style="width:250px;">
-  <button onclick="search()">검색</button>
-  
-  <div id="map"></div>
+
+<body class="p-4">
+
+  <div class="container my-5">
+    <h1 class="text-center">{{title}}</h1>
+
+    <table class="table table-striped table-hover text-center" id="petvetTable">
+      <thead>
+        <tr>
+          <th>관리번호</th>
+          <th>사업장명</th>
+          <th>도로명주소</th>
+          <th>상세영업상태명</th>
+          <!-- <th>좌표정보(X)</th>
+          <th>좌표정보(Y)</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in info %}
+        <tr class="hospital-row" data-name="{{ i['사업장명'] }}" data-x="{{ i['좌표정보(X)'] }}" data-y="{{ i['좌표정보(Y)'] }}">
+          <td>{{ i['관리번호'] }}</td>
+          <td>{{ i['사업장명'] }}</td>
+          <td>{{ i['도로명주소'] }}</td>
+          <td>{{ i['상세영업상태명'] }}</td>
+          <!-- <td>{{ i['좌표정보(X)'] }}</td>
+          <td>{{ i['좌표정보(Y)'] }}</td> -->
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- 페이지네이션 -->
+    <div class="text-center my-4">
+      {% if page > 1 %}
+      <a href="?page={{ page - 1 }}" class="btn btn-secondary btn-sm">이전</a>
+      {% else %}
+      <button class="btn btn-secondary btn-sm" disabled>이전</button>
+      {% endif %}
+
+      <span class="mx-2">{{ page }} / {{ total_pages }}</span>
+
+      {% if page < total_pages %} <a href="?page={{ page + 1 }}" class="btn btn-secondary btn-sm">다음</a>
+        {% else %}
+        <button class="btn btn-secondary btn-sm" disabled>다음</button>
+        {% endif %}
+    </div>
+  </div>
+
+  <!-- ✅ 지도 모달 -->
+  <div class="modal fade" id="mapModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="hospitalName">지도 보기</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
-    // 초기 지도 (서울 중심)
-    const mapContainer = document.getElementById('map');
-    const mapOption = {
-      center: new kakao.maps.LatLng(37.5665, 126.9780),
-      level: 7
-    };
-    const map = new kakao.maps.Map(mapContainer, mapOption);
-    let markers = [];
+    let map, marker;
 
-    function search() {
-      const name = document.getElementById('name').value;
-      fetch(`/search?name=${encodeURIComponent(name)}`)
-        .then(res => res.json())
-        .then(data => {
-          // 기존 마커 제거
-          markers.forEach(m => m.setMap(null));
-          markers = [];
+    window.onload = function () {  // ✅ SDK 로드 후에 이벤트 등록
+      document.querySelectorAll('.hospital-row').forEach(row => {
+        row.addEventListener('click', function () {
+          const name = this.dataset.name;
+          const x = parseFloat(this.dataset.x);
+          const y = parseFloat(this.dataset.y);
 
-          if (data.length === 0) {
-            alert("검색 결과가 없습니다.");
-            return;
-          }
+          const lat = y;
+          const lon = x;
 
-          const bounds = new kakao.maps.LatLngBounds();
+          const modal = new bootstrap.Modal(document.getElementById('mapModal'));
+          document.getElementById('hospitalName').textContent = name;
+          modal.show();
 
-          data.forEach(h => {
-            const position = new kakao.maps.LatLng(h.위도, h.경도);
-            const marker = new kakao.maps.Marker({ position });
-            marker.setMap(map);
-            markers.push(marker);
-            bounds.extend(position);
+          setTimeout(() => {
+            if (typeof kakao === 'undefined' || !kakao.maps) {
+              alert("카카오 지도 SDK가 아직 로드되지 않았습니다.");
+              return;
+            }
 
-            const infowindow = new kakao.maps.InfoWindow({
-              content: `<div style="padding:5px;font-size:13px;">
-                         <b>${h.사업장명}</b><br>${h.도로명주소}
-                        </div>`
-            });
-            kakao.maps.event.addListener(marker, 'click', function() {
-              infowindow.open(map, marker);
-            });
-          });
+            const container = document.getElementById('map');
+            const options = {
+              center: new kakao.maps.LatLng(33.450701, 126.570667),
+              // center: new kakao.maps.LatLng(lat, lon), #지도 로딩 오류
+              level: 3
+            };
 
-          // 지도 범위 자동 조정
-          map.setBounds(bounds);
+            if (!map) {
+              map = new kakao.maps.Map(container, options);
+              marker = new kakao.maps.Marker({
+                position: new kakao.maps.LatLng(lat, lon),
+                map: map
+              });
+            } else {
+              map.setCenter(new kakao.maps.LatLng(lat, lon));
+              marker.setPosition(new kakao.maps.LatLng(lat, lon));
+            }
+          }, 300);
         });
-    }
+      });
+    };
   </script>
+
 </body>
+
 </html>
